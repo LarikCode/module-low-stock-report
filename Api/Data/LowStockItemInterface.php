@@ -14,14 +14,22 @@ namespace Ivanchenko\LowStockReport\Api\Data;
  */
 interface LowStockItemInterface
 {
+    /**
+     * @return string
+     */
     public function getSku(): string;
 
+    /**
+     * @return string
+     */
     public function getName(): string;
 
     /**
      * Salable quantity, matching Magento\InventorySales\Model
      * \GetProductSalableQty's own formula exactly:
      * is_salable ? (quantity + reservations - min_qty) : 0.
+     *
+     * @return float
      */
     public function getQty(): float;
 }

@@ -26,6 +26,7 @@ interface LowStockReportManagementInterface
      * @param int $threshold defaults to 10, matching the dashboard action's
      *        own DEFAULT_LOW_STOCK_THRESHOLD.
      * @param int|null $storeId defaults to the default store when null.
+     * @return \Ivanchenko\LowStockReport\Api\Data\LowStockReportInterface
      */
     public function getReport(int $threshold = 10, ?int $storeId = null): LowStockReportInterface;
 }

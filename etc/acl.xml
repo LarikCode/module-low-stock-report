@@ -10,7 +10,7 @@
                         Stores > Inventory in the admin role-editor tree for
                         any NEW role going forward. It does NOT retroactively
                         grant this resource to a role/integration that was
-                        already saved before this resource existed -- that
+                        already saved before this resource existed; that
                         needs an explicit authorization_rule row (see the
                         module README's "Granting an existing Integration
                         access" section).

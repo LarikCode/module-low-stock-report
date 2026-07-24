@@ -8,6 +8,9 @@ namespace Ivanchenko\LowStockReport\Api\Data;
  */
 interface LowStockReportInterface
 {
+    /**
+     * @return int
+     */
     public function getThreshold(): int;
 
     /**
@@ -17,6 +20,8 @@ interface LowStockReportInterface
      * Configurable/grouped/bundle parents are intentionally excluded here,
      * same as the JS action this replaces: their own row never carries
      * stock, only their children's do.
+     *
+     * @return int
      */
     public function getTotalScanned(): int;
 
