@@ -1,5 +1,7 @@
 # Ivanchenko_LowStockReport
 
+[![CI](https://github.com/LarikCode/module-low-stock-report/actions/workflows/ci.yml/badge.svg)](https://github.com/LarikCode/module-low-stock-report/actions/workflows/ci.yml)
+
 Source: https://github.com/LarikCode/module-low-stock-report
 
 A Magento 2 module adding a single bulk REST endpoint (`GET /rest/V1/low-stock-report`) that reports real-time MSI salable quantity across the **entire** stock-carrying catalog, computed via a small fixed number of bulk SQL queries rather than one round trip per SKU.
@@ -74,4 +76,10 @@ An optional `storeId` query parameter resolves the specific store's website and 
 vendor/bin/phpunit
 ```
 
-Plain `PHPUnit\Framework\TestCase` unit tests, every constructor dependency mocked — no Magento integration-test bootstrap required. Covers: exact formula replication, `is_salable=false` forcing qty to 0, strict threshold exclusion, ascending sort, the 50-item cap vs. true scanned count, configurable/grouped/bundle exclusion, SKU chunking at 500, and store/stock resolution (both the default-store and explicit-`storeId` paths).
+Plain `PHPUnit\Framework\TestCase` unit tests, every constructor dependency mocked — no Magento integration-test bootstrap required. Covers: exact formula replication, `is_salable=false` forcing qty to 0, strict threshold exclusion, ascending sort, the 50-item cap vs. true scanned count, configurable/grouped/bundle exclusion, SKU chunking at 500, and store/stock resolution (both the default-store and explicit-`storeId` paths). All 14 tests pass, run inside a real Magento 2.4.9 install.
+
+Beyond unit tests, this module was verified with a real end-to-end OAuth test: a Magento Integration scoped to exactly this module's ACL resource, hitting the live REST endpoint. That test caught two real bugs unit tests alone couldn't have (an invalid XML comment that silently broke ACL loading entirely, and a missing `@return` annotation Magento's webapi reflection requires) — see the design notes above.
+
+### What CI actually checks (and why it's not the full suite)
+
+The `CI` badge above runs PHP syntax linting and `composer validate` on every push — real, but intentionally narrow. It does **not** run the PHPUnit suite in GitHub Actions: the mocked classes (`Magento\Catalog\Model\Product`, `GetStockItemsDataInterface`, etc.) need Magento's actual packages installed, and `magento/*` packages aren't on public Packagist — they're only distributed via `repo.magento.com`, which requires Magento Marketplace credentials. Wiring those into a public repo's CI as secrets would mean any PR (including from an untrusted fork) could potentially trigger a workflow that exfiltrates them — not a trade worth making for a portfolio module. Run the real suite locally instead, inside any Magento install that already has these credentials configured (see above).
